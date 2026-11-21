@@ -69,7 +69,7 @@ async function login(e){
  e.preventDefault();
  const email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value;
  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
- if(error){showToast('Login failed. Check your email and password.');return}
+ if(error){console.error('HANDY HUB Supabase login error:',error);showToast('Login failed: '+(error.message||'Unknown authentication error'));return}
  currentUser=data.user;
  const {data:adminRow,error:adminError}=await supabaseClient.from('hh_admins').select('user_id').eq('user_id',currentUser.id).maybeSingle();
  if(adminError||!adminRow){await supabaseClient.auth.signOut();currentUser=null;showToast('This account is not authorized as an admin.');return}
